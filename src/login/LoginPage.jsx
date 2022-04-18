@@ -135,12 +135,6 @@ class LoginPage extends React.Component {
 
     return (
       <>
-        {(!isEnterpriseLoginDisabled || ((isEnterpriseLoginDisabled && isInstitutionAuthActive) || isSocialAuthActive))
-           && (
-             <div className="mt-4 mb-3 h4">
-               {intl.formatMessage(messages['login.other.options.heading'])}
-             </div>
-           )}
 
         {!isEnterpriseLoginDisabled && (
           <Hyperlink className="btn btn-link btn-sm text-body p-0 mb-4" destination={this.getEnterPriseLoginURL()}>
@@ -166,6 +160,13 @@ class LoginPage extends React.Component {
             )}
           </>
         )}
+        {(!isEnterpriseLoginDisabled || ((isEnterpriseLoginDisabled && isInstitutionAuthActive) || isSocialAuthActive))
+          && (
+            <div className="d-flex mt-4 mb-3 h4 justify-content-center">
+              {intl.formatMessage(messages['login.other.options.heading'])}
+            </div>
+          )}
+
       </>
     );
   }
@@ -214,16 +215,17 @@ class LoginPage extends React.Component {
         />
         <div className="mw-xs mt-3">
           {thirdPartyAuthContext.currentProvider
-          && (
-            <ThirdPartyAuthAlert
-              currentProvider={thirdPartyAuthContext.currentProvider}
-              platformName={thirdPartyAuthContext.platformName}
-            />
-          )}
+            && (
+              <ThirdPartyAuthAlert
+                currentProvider={thirdPartyAuthContext.currentProvider}
+                platformName={thirdPartyAuthContext.platformName}
+              />
+            )}
           {this.props.loginError ? <LoginFailureMessage loginError={this.props.loginError} /> : null}
           {submitState === DEFAULT_STATE && this.state.isSubmitted ? windowScrollTo({ left: 0, top: 0, behavior: 'smooth' }) : null}
           {activationMsgType && <AccountActivationMessage messageType={activationMsgType} />}
           {this.props.resetPassword && !this.props.loginError ? <ResetPasswordSuccess /> : null}
+          {this.renderThirdPartyAuth(providers, secondaryProviders, currentProvider, thirdPartyAuthApiStatus, intl)}
           <Form>
             <FormGroup
               name="emailOrUsername"
@@ -262,7 +264,6 @@ class LoginPage extends React.Component {
             >
               {intl.formatMessage(messages['forgot.password'])}
             </Link>
-            {this.renderThirdPartyAuth(providers, secondaryProviders, currentProvider, thirdPartyAuthApiStatus, intl)}
           </Form>
         </div>
       </>
