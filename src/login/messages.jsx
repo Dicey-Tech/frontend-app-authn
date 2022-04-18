@@ -79,7 +79,7 @@ const messages = defineMessages({
   },
   'login.other.options.heading': {
     id: 'login.other.options.heading',
-    defaultMessage: 'Or sign in with:',
+    defaultMessage: 'Or',
     description: 'Text that appears above other sign in options like social auth buttons',
   },
   'non.compliant.password.title': {
@@ -90,8 +90,8 @@ const messages = defineMessages({
   'non.compliant.password.message': {
     id: 'non.compliant.password.message',
     defaultMessage: 'Your current password does not meet the new security requirements. '
-                    + 'We just sent a password-reset message to the email address associated with this account. '
-                    + 'Thank you for helping us keep your data safe.',
+      + 'We just sent a password-reset message to the email address associated with this account. '
+      + 'Thank you for helping us keep your data safe.',
     description: 'Error message for non-compliant password',
   },
   'account.locked.out.message.1': {
