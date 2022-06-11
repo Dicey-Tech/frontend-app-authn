@@ -20,7 +20,7 @@ function SocialAuthProviders(props) {
   }
 
   const socialAuth = socialAuthProviders.map((provider, index) => {
-    const baseLmsUrl = getConfig().LMS_BASE_URL;
+    
     return (
       <button
         id={provider.id}
@@ -32,7 +32,7 @@ function SocialAuthProviders(props) {
       >
         {provider.iconImage ? (
           <div aria-hidden="true">
-            <Image className="icon-image" src={baseLmsUrl + provider.iconImage} alt={`icon ${provider.name}`} />
+            <Image className="icon-image" src={provider.iconImage} alt={`icon ${provider.name}`} />
           </div>
         )
           : (
