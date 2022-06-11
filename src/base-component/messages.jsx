@@ -1,6 +1,11 @@
 import { defineMessages } from '@edx/frontend-platform/i18n';
 
 const messages = defineMessages({
+  'discover.future': {
+    id: 'discover.future',
+    defaultMessage: 'Discover Your Future',
+    description: 'Header text for logistration MFE pages',
+  },
   'start.learning': {
     id: 'start.learning',
     defaultMessage: 'Start learning',

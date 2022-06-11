@@ -45,13 +45,8 @@ const SmallLayout = (props) => {
           </svg>
           <div className="pb-3">
             <h1 className="small-heading">
-              {intl.formatMessage(messages['start.learning'])}
+              {intl.formatMessage(messages['discover.future'])}
               <br />
-              <span
-                className={((experimentName === 'variation1' || experimentName === 'variation2') && isRegistrationPage) ? 'text-accent-b' : 'text-accent-a'}
-              >
-                {intl.formatMessage(messages['with.site.name'], { siteName: getConfig().SITE_NAME })}
-              </span>
             </h1>
             {(experimentName === 'variation1' && isRegistrationPage) ? (
               <div className="small text-light-300 pl-2">

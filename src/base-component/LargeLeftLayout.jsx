@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 
 import { injectIntl, intlShape } from '@edx/frontend-platform/i18n';
-import { getConfig } from '@edx/frontend-platform';
 import PropTypes from 'prop-types';
 import ClipboardJS from 'clipboard';
 
@@ -40,13 +39,8 @@ const LargeLeftLayout = (props) => {
       </svg>
       <div className={classNames({ 'pl-4': experimentName === 'variation1' && isRegistrationPage })}>
         <h1 className={classNames('large-heading', { 'mb-4.5': experimentName === 'variation1' && isRegistrationPage })}>
-          {intl.formatMessage(messages['start.learning'])}
-          <span
-            className={((experimentName === 'variation1' || experimentName === 'variation2') && isRegistrationPage) ? 'text-accent-b' : 'text-accent-a'}
-          >
-            <br />
-            {intl.formatMessage(messages['with.site.name'], { siteName: getConfig().SITE_NAME })}
-          </span>
+          {intl.formatMessage(messages['discover.future'])}
+          <br />
         </h1>
         {experimentName === 'variation1' && isRegistrationPage ? (
           <span className="text-light-300 dicount-heading">
