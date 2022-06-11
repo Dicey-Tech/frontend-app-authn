@@ -589,7 +589,7 @@ class RegistrationPage extends React.Component {
               platformName: getConfig().SITE_NAME,
               tosAndHonorCode: (
                 <Hyperlink variant="muted" destination={getConfig().TOS_AND_HONOR_CODE || '#'} target="_blank">
-                  {intl.formatMessage(messages['terms.of.service.and.honor.code'])}
+                  {intl.formatMessage(messages['terms.and.conditions'])}
                 </Hyperlink>
               ),
               privacyPolicy: (

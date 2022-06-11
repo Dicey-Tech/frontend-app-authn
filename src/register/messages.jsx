@@ -198,6 +198,11 @@ const messages = defineMessages({
     description: '',
   },
   // Terms of Service and Honor Code
+  'terms.and.conditions': {
+    id: 'terms.and.conditions',
+    defaultMessage: 'Terms and Conditions',
+    description: 'Text for the hyperlink that redirects user to terms and conditions',
+  },
   'terms.of.service.and.honor.code': {
     id: 'terms.of.service.and.honor.code',
     defaultMessage: 'Terms of Service and Honor Code',
