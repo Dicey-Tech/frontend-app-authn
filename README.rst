@@ -8,15 +8,12 @@ This is a micro-frontend application responsible for the login, registration and
 Development
 -----------
 
-Start Devstack
+With Devstack
 ^^^^^^^^^^^^^^
 
 To use this application `devstack <https://github.com/edx/devstack>`__ must be running.
 
 -  Start devstack
-
-Start the development server
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In this project, install requirements and start the development server by running:
 
@@ -26,6 +23,23 @@ In this project, install requirements and start the development server by runnin
    npm start # The server will run on port 1999
 
 Once the dev server is up visit http://localhost:1999/login.
+
+With Tutor
+^^^^^^^^^^
+
+Add the following to `$(TUTOR_ROOT)/env/dev/docker-compose.override.yml`.
+
+.. code:: dockerfile
+
+   auth:
+    volumes:
+      - /home/sofiane/frontend-app-authn/:/openedx/app
+
+And start the MFE container with
+
+.. code:: bash
+
+   tutor dev start auth -d
 
 Configuration and Deployment
 ----------------------------
