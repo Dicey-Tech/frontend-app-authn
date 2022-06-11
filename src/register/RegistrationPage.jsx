@@ -695,7 +695,7 @@ class RegistrationPage extends React.Component {
             {!this.state.signUpWithEmailVisible
               ? (
                 <div className="d-flex mt-4 mb-3 justify-content-center">
-                  <Button name="signupwemail" id="signupwemail" variant="brand" onClick={this.handleSignUpEmailClick}>{intl.formatMessage(messages['register.signupwith.email.button'])}</Button>
+                  <Button name="signupwemail" id="signupwemail" variant="primary" onClick={this.handleSignUpEmailClick}>{intl.formatMessage(messages['register.signupwith.email.button'])}</Button>
                 </div>
               )
               : this.renderSignUpForm(intl, currentProvider, submitState)}

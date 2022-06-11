@@ -50,13 +50,7 @@ const MediumLayout = (props) => {
           </svg>
           <div className="pb-4">
             <h1 className="medium-heading">
-              {intl.formatMessage(messages['start.learning'])}
-              <span
-                className={((experimentName === 'variation1' || experimentName === 'variation2') && isRegistrationPage) ? 'text-accent-b' : 'text-accent-a'}
-              >
-                <br />
-                {intl.formatMessage(messages['with.site.name'], { siteName: getConfig().SITE_NAME })}
-              </span>
+              {intl.formatMessage(messages['discover.future'])}
             </h1>
             {experimentName === 'variation1' && isRegistrationPage ? (
               <div className="text-light-300 pl-3">
