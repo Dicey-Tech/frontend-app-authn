@@ -59,14 +59,9 @@ const messages = defineMessages({
     description: 'Help text for email field on registration page',
   },
   // Form buttons
-  'create.account.button': {
-    id: 'create.account.button',
-    defaultMessage: 'Create an account',
-    description: 'Button label that appears on register page',
-  },
-  'register.for.free.button': {
-    id: 'register.for.free.button',
-    defaultMessage: 'Register for free',
+  'create.account.for.free.button': {
+    id: 'create.account.for.free.button',
+    defaultMessage: 'Create an account for free',
     description: 'Label text for registration form submission button',
   },
   'create.an.account.btn.pending.state': {
@@ -212,6 +207,16 @@ const messages = defineMessages({
     id: 'privacy.policy',
     defaultMessage: 'Privacy Policy',
     description: 'Text for the hyperlink that redirects user to privacy policy',
+  },
+  'honor.code': {
+    id: 'honor.code',
+    defaultMessage: 'Honor Code',
+    description: 'Text for the hyperlink that redirects user to the honor code',
+  },
+  'terms.of.service': {
+    id: 'terms.of.service',
+    defaultMessage: 'Terms of Service',
+    description: 'Text for the hyperlink that redirects user to the terms of service',
   },
   // Optional fields
   'registration.year.of.birth.label': {

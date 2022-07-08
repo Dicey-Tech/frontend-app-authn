@@ -97,11 +97,11 @@ const ForgotPasswordPage = (props) => {
                     { siteName: getConfig().SITE_NAME })}
                   </title>
                 </Helmet>
-                <Form className="mw-xs">
+                <Form id="forget-password-form" name="forget-password-form" className="mw-xs">
                   <ForgotPasswordAlert email={props.email} emailError={errors.email} status={status} />
-                  <h4>
+                  <h2 className="h4">
                     {intl.formatMessage(messages['forgot.password.page.heading'])}
-                  </h4>
+                  </h2>
                   <p className="mb-4">
                     {intl.formatMessage(messages['forgot.password.page.instructions'])}
                   </p>
@@ -116,6 +116,8 @@ const ForgotPasswordPage = (props) => {
                     helpText={[intl.formatMessage(messages['forgot.password.email.help.text'], { platformName })]}
                   />
                   <StatefulButton
+                    id="submit-forget-password"
+                    name="submit-forget-password"
                     type="submit"
                     variant="brand"
                     className="login-button-width"
@@ -129,6 +131,7 @@ const ForgotPasswordPage = (props) => {
                   />
                   <Hyperlink
                     id="forgot-password"
+                    name="forgot-password"
                     className="ml-4 font-weight-500 text-body"
                     destination={supportUrl}
                     onClick={e => {

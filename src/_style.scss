@@ -38,8 +38,12 @@ $accent-a-light: #c9f2f5;
   width: 12rem;
 }
 
+.register-stateful-button-width {
+  min-width: 14.4rem;
+}
+
 .login-button-width {
-  width: 6rem;
+  min-width: 6rem;
 }
 
 .tpa-skeleton {
@@ -615,16 +619,17 @@ select.form-control {
 }
 
 .dropdown-container {
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15), 0px 2px 8px rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-  max-height: 200px;
-  font-size: 1rem;
-  font-weight: normal;
-  line-height: 1.25rem;
-  overflow-y: scroll;
-  position: absolute;
-  background-color: #fff;
-  width: 464px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.15), 0px 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    max-height: 200px;
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: 1.25rem;
+    overflow-y: scroll;
+    position: absolute;
+    background-color: #fff;
+    width: 464px;
+    z-index: 100 !important;
 }
 
 .email-error-alert {
@@ -862,8 +867,6 @@ select.form-control {
     font-size: 0.75rem;
     line-height: 1.25rem;
   }
-
-  margin-top: 1rem;
   margin-left: 3px;
 }
 
@@ -874,7 +877,7 @@ select.form-control {
 }
 
 .suggested-username-close-button {
-  right: 0;
+  right: 1rem;
   position: absolute;
 }
 
@@ -892,8 +895,6 @@ select.form-control {
   display: inline-flex;
 }
 
-//style the login buttons for Google and MS (Azure) here
-//.btn-oa2-google-oauth2 {
-//  background-color: #2f80ed;
-//
-//}
+.pgn__form-control-decorator-trailing {
+  right: 0 !important;
+}
