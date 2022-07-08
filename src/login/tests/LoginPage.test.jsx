@@ -9,6 +9,7 @@ import renderer from 'react-test-renderer';
 import CookiePolicyBanner from '@edx/frontend-component-cookie-policy-banner';
 import { getConfig, mergeConfig } from '@edx/frontend-platform';
 import * as analytics from '@edx/frontend-platform/analytics';
+import * as auth from '@edx/frontend-platform/auth';
 import { IntlProvider, injectIntl } from '@edx/frontend-platform/i18n';
 
 import { loginRequest, loginRequestFailure, loginRequestReset } from '../data/actions';
@@ -18,9 +19,11 @@ import LoginPage from '../LoginPage';
 import { COMPLETE_STATE, PENDING_STATE } from '../../data/constants';
 
 jest.mock('@edx/frontend-platform/analytics');
+jest.mock('@edx/frontend-platform/auth');
 
 analytics.sendTrackEvent = jest.fn();
 analytics.sendPageEvent = jest.fn();
+auth.getAuthService = jest.fn();
 
 const IntlLoginFailureMessage = injectIntl(LoginFailureMessage);
 const IntlLoginPage = injectIntl(LoginPage);
@@ -145,7 +148,7 @@ describe('LoginPage', () => {
 
   it('should match default button state', () => {
     const loginPage = mount(reduxWrapper(<IntlLoginPage {...props} />));
-    expect(loginPage.find('button[type="submit"] span').first().text()).toEqual(' Sign in ');
+    expect(loginPage.find('button[type="submit"] span').first().text()).toEqual('Sign in');
   });
 
   it('should match pending button state', () => {
@@ -160,7 +163,7 @@ describe('LoginPage', () => {
     const loginPage = mount(reduxWrapper(<IntlLoginPage {...props} />));
     const button = loginPage.find('button[type="submit"] span').first();
 
-    expect(button.find('.sr-only').text()).toEqual(' pending ');
+    expect(button.find('.sr-only').text()).toEqual('pending');
   });
 
   it('should show forgot password link', () => {
@@ -263,14 +266,14 @@ describe('LoginPage', () => {
   // ******** test redirection ********
 
   it('should redirect to url returned by login endpoint', () => {
-    const dasboardUrl = 'http://localhost:18000/enterprise/select/active/?success_url=/dashboard';
+    const dashboardUrl = 'http://localhost:18000/enterprise/select/active/?success_url=/dashboard';
     store = mockStore({
       ...initialState,
       login: {
         ...initialState.login,
         loginResult: {
           success: true,
-          redirectUrl: dasboardUrl,
+          redirectUrl: dashboardUrl,
         },
       },
     });
@@ -278,7 +281,7 @@ describe('LoginPage', () => {
     delete window.location;
     window.location = { href: getConfig().BASE_URL };
     renderer.create(reduxWrapper(<IntlLoginPage {...props} />));
-    expect(window.location.href).toBe(dasboardUrl);
+    expect(window.location.href).toBe(dashboardUrl);
   });
 
   it('should redirect to finishAuthUrl upon successful login via SSO', () => {

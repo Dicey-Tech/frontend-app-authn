@@ -5,35 +5,43 @@ import Skeleton from 'react-loading-skeleton';
 import { Helmet } from 'react-helmet';
 import PropTypes, { string } from 'prop-types';
 
-import { getConfig } from '@edx/frontend-platform';
+import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
 import {
-  injectIntl, intlShape, getCountryList, getLocale, FormattedMessage,
+  injectIntl, intlShape, getCountryList, getLocale,
 } from '@edx/frontend-platform/i18n';
 import {
   Alert, Form, Hyperlink, StatefulButton, Icon, Button,
 } from '@edx/paragon';
 import { Error, Close } from '@edx/paragon/icons';
-
+import FormFieldRenderer from '../field-renderer';
 import {
   clearUsernameSuggestions, registerNewUser, resetRegistrationForm, fetchRealtimeValidations,
 } from './data/actions';
 import {
-  FORM_SUBMISSION_ERROR, DEFAULT_SERVICE_PROVIDER_DOMAINS, DEFAULT_TOP_LEVEL_DOMAINS, COMMON_EMAIL_PROVIDERS,
+  FIELDS, FORM_SUBMISSION_ERROR, DEFAULT_SERVICE_PROVIDER_DOMAINS, DEFAULT_TOP_LEVEL_DOMAINS, COMMON_EMAIL_PROVIDERS,
 } from './data/constants';
 import {
-  registrationErrorSelector, registrationRequestSelector, validationsSelector, usernameSuggestionsSelector,
+  registrationErrorSelector,
+  registrationRequestSelector,
+  validationsSelector,
+  usernameSuggestionsSelector,
 } from './data/selectors';
 import messages from './messages';
 import RegistrationFailure from './RegistrationFailure';
 import UsernameField from './UsernameField';
+import HonorCode from './HonorCode';
 
 import {
   RedirectLogistration, SocialAuthProviders, ThirdPartyAuthAlert, RenderInstitutionButton,
   InstitutionLogistration, FormGroup, PasswordField,
 } from '../common-components';
 import { getThirdPartyAuthContext } from '../common-components/data/actions';
-import { thirdPartyAuthContextSelector } from '../common-components/data/selectors';
+import {
+  extendedProfileSelector,
+  fieldDescriptionSelector,
+  thirdPartyAuthContextSelector,
+} from '../common-components/data/selectors';
 import EnterpriseSSO from '../common-components/EnterpriseSSO';
 import {
   DEFAULT_STATE, PENDING_STATE, REGISTER_PAGE, VALID_EMAIL_REGEX, LETTER_REGEX, NUMBER_REGEX, VALID_NAME_REGEX,
@@ -43,6 +51,7 @@ import {
 } from '../data/utils';
 import CountryDropdown from './CountryDropdown';
 import { getLevenshteinSuggestion, getSuggestionForInvalidEmail } from './utils';
+import TermsOfService from './TermsOfService';
 
 class RegistrationPage extends React.Component {
   constructor(props, context) {
@@ -51,6 +60,9 @@ class RegistrationPage extends React.Component {
     this.handleOnClose = this.handleOnClose.bind(this);
 
     this.queryParams = getAllPossibleQueryParam();
+    // TODO: Once we have tested it and ready for openedX we can remove this flag and make the code
+    // permanent part of Authn and remove extra code
+    this.showDynamicRegistrationFields = getConfig().ENABLE_DYNAMIC_REGISTRATION_FIELDS;
     this.tpaHint = getTpaHint();
     this.state = {
       country: '',
@@ -72,7 +84,7 @@ class RegistrationPage extends React.Component {
       failureCount: 0,
       startTime: Date.now(),
       totalRegistrationTime: 0,
-      optimizelyExperimentName: '', // eslint-disable-line react/no-unused-state
+      optimizelyExperimentName: '',
       readOnly: true,
       validatePassword: false,
       // TODO: Remove after VAN-704 is complete
@@ -82,14 +94,13 @@ class RegistrationPage extends React.Component {
   }
 
   componentDidMount() {
+    const payload = { ...this.queryParams };
     window.optimizely = window.optimizely || [];
     window.optimizely.push({
       type: 'page',
       pageName: 'authn_registration_page',
       isActive: true,
     });
-
-    const payload = { ...this.queryParams };
 
     if (payload.save_for_later === 'true') {
       sendTrackEvent('edx.bi.user.saveforlater.course.enroll.clicked', { category: 'save-for-later' });
@@ -168,28 +179,35 @@ class RegistrationPage extends React.Component {
   }
 
   getExperiments = () => {
-    const { experimentName, renameRegisterExperiment } = window;
+    const { experimentName } = window;
 
     if (experimentName) {
-      // eslint-disable-next-line react/no-unused-state
       this.setState({ optimizelyExperimentName: experimentName });
     }
+  };
 
-    if (renameRegisterExperiment) {
-      this.setState({ registerRenameExpVariation: renameRegisterExperiment });
+  onChangeHandler = (e) => {
+    const { name, value, checked } = e.target;
+    const { errors, values } = this.state;
+    if (e.target.type === 'checkbox') {
+      errors[name] = '';
+      values[name] = checked;
+    } else {
+      values[name] = value;
     }
+    const state = { errors, values };
+    this.setState({ ...state });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { startTime } = this.state;
     const totalRegistrationTime = (Date.now() - startTime) / 1000;
-    const payload = {
+    const dynamicFieldErrorMessages = {};
+    let payload = {
       name: this.state.name,
       username: this.state.username,
       email: this.state.email,
-      country: this.state.country,
-      honor_code: true,
       is_authn_mfe: true,
     };
 
@@ -199,7 +217,28 @@ class RegistrationPage extends React.Component {
       payload.password = this.state.password;
     }
 
-    if (!this.isFormValid(payload)) {
+    if (this.showDynamicRegistrationFields) {
+      payload.extendedProfile = [];
+      Object.keys(this.props.fieldDescriptions).forEach((fieldName) => {
+        if (this.props.extendedProfile.includes(fieldName)) {
+          payload.extendedProfile.push({ fieldName, fieldValue: this.state.values[fieldName] });
+        } else {
+          payload[fieldName] = this.state.values[fieldName];
+        }
+        dynamicFieldErrorMessages[fieldName] = this.props.fieldDescriptions[fieldName].error_message;
+      });
+      if (
+        this.props.fieldDescriptions[FIELDS.HONOR_CODE]
+        && this.props.fieldDescriptions[FIELDS.HONOR_CODE].type === 'tos_and_honor_code'
+      ) {
+        payload[FIELDS.HONOR_CODE] = true;
+      }
+    } else {
+      payload.country = this.state.country;
+      payload.honor_code = true;
+    }
+
+    if (!this.isFormValid(payload, dynamicFieldErrorMessages)) {
       this.setState(prevState => ({
         errorCode: FORM_SUBMISSION_ERROR,
         failureCount: prevState.failureCount + 1,
@@ -211,6 +250,7 @@ class RegistrationPage extends React.Component {
       payload.marketing_emails_opt_in = this.state.marketingOptIn;
     }
 
+    payload = snakeCaseObject(payload);
     payload.totalRegistrationTime = totalRegistrationTime;
     this.setState({
       totalRegistrationTime,
@@ -301,7 +341,7 @@ class RegistrationPage extends React.Component {
 
     Object.keys(payload).forEach(key => {
       if (!payload[key]) {
-        errors[key] = this.props.intl.formatMessage(messages[`empty.${key}.field.error`]);
+        errors[key] = (key in dynamicFieldError) ? dynamicFieldError[key] : this.props.intl.formatMessage(messages[`empty.${key}.field.error`]);
       }
       // Mark form invalid, if there was already a validation error for this key or we added empty field error
       if (errors[key]) {
@@ -652,6 +692,73 @@ class RegistrationPage extends React.Component {
       });
     }
 
+    const honorCode = [];
+    const formFields = this.showDynamicRegistrationFields ? (
+      Object.keys(this.props.fieldDescriptions).map((fieldName) => {
+        const fieldData = this.props.fieldDescriptions[fieldName];
+        switch (fieldData.name) {
+          case FIELDS.COUNTRY:
+            return (
+              <span key={fieldData.name}>
+                <CountryDropdown
+                  name="country"
+                  floatingLabel={intl.formatMessage(messages['registration.country.label'])}
+                  options={getCountryList(getLocale())}
+                  valueKey="code"
+                  displayValueKey="name"
+                  value={this.state.values[fieldData.name]}
+                  handleBlur={this.handleOnBlur}
+                  handleFocus={this.handleOnFocus}
+                  errorMessage={intl.formatMessage(messages['empty.country.field.error'])}
+                  handleChange={
+                    (value) => this.setState(prevState => ({ values: { ...prevState.values, country: value } }))
+                  }
+                  errorCode={this.state.errorCode}
+                  readOnly={this.state.readOnly}
+                />
+              </span>
+            );
+          case FIELDS.HONOR_CODE:
+            honorCode.push(
+              <span key={fieldData.name}>
+                <HonorCode
+                  fieldType={fieldData.type}
+                  value={this.state.values[fieldData.name]}
+                  onChangeHandler={this.onChangeHandler}
+                  errorMessage={this.state.errors[fieldData.name]}
+                />
+              </span>,
+            );
+            return null;
+          case FIELDS.TERMS_OF_SERVICE:
+            honorCode.push(
+              <span key={fieldData.name}>
+                <TermsOfService
+                  value={this.state.values[fieldData.name]}
+                  onChangeHandler={this.onChangeHandler}
+                  errorMessage={this.state.errors[fieldData.name]}
+                />
+              </span>,
+            );
+            return null;
+          default:
+            return (
+              <span key={fieldData.name}>
+                <FormFieldRenderer
+                  fieldData={fieldData}
+                  value={this.state.values[fieldData.name]}
+                  onChangeHandler={this.onChangeHandler}
+                  handleBlur={this.validateDynamicFields}
+                  handleFocus={this.handleOnFocus}
+                  errorMessage={this.state.errors[fieldData.name]}
+                  isRequired
+                />
+              </span>
+            );
+        }
+      })
+    ) : null;
+
     return (
       <>
         <Helmet>
@@ -752,6 +859,8 @@ class RegistrationPage extends React.Component {
 }
 
 RegistrationPage.defaultProps = {
+  extendedProfile: [],
+  fieldDescriptions: {},
   registrationResult: null,
   registerNewUser: null,
   registrationErrorCode: null,
@@ -771,6 +880,8 @@ RegistrationPage.defaultProps = {
 };
 
 RegistrationPage.propTypes = {
+  extendedProfile: PropTypes.arrayOf(PropTypes.string),
+  fieldDescriptions: PropTypes.shape({}),
   intl: intlShape.isRequired,
   getThirdPartyAuthContext: PropTypes.func.isRequired,
   registerNewUser: PropTypes.func,
@@ -824,6 +935,8 @@ const mapStateToProps = state => {
     validationDecisions: validationsSelector(state),
     statusCode: state.register.statusCode,
     usernameSuggestions: usernameSuggestionsSelector(state),
+    fieldDescriptions: fieldDescriptionSelector(state),
+    extendedProfile: extendedProfileSelector(state),
   };
 };
 

@@ -148,7 +148,7 @@ const ResetPasswordPage = (props) => {
     const { token } = props.match.params;
     if (token) {
       props.validateToken(token);
-      return <Spinner animation="border" variant="primary" className="mt-5" />;
+      return <Spinner animation="border" variant="primary" className="centered-align-spinner" />;
     }
   } else if (props.status === PASSWORD_RESET_ERROR) {
     return <Redirect to={updatePathWithQueryParams(RESET_PAGE)} />;
@@ -174,7 +174,7 @@ const ResetPasswordPage = (props) => {
               <ResetPasswordFailure errorCode={errorCode} errorMsg={props.errorMsg} />
               <h4>{intl.formatMessage(messages['reset.password'])}</h4>
               <p className="mb-4">{intl.formatMessage(messages['reset.password.page.instructions'])}</p>
-              <Form>
+              <Form id="set-reset-password-form" name="set-reset-password-form">
                 <PasswordField
                   name="newPassword"
                   value={newPassword}
@@ -194,6 +194,8 @@ const ResetPasswordPage = (props) => {
                   floatingLabel={intl.formatMessage(messages['confirm.password.label'])}
                 />
                 <StatefulButton
+                  id="submit-new-password"
+                  name="submit-new-password"
                   type="submit"
                   variant="brand"
                   className="stateful-button-width"

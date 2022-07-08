@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { FormattedMessage, injectIntl, intlShape } from '@edx/frontend-platform/i18n';
+import { getAuthService } from '@edx/frontend-platform/auth';
 import { Alert, Hyperlink } from '@edx/paragon';
 import { Error } from '@edx/paragon/icons';
 import PropTypes from 'prop-types';
@@ -15,12 +16,16 @@ import {
   INTERNAL_SERVER_ERROR,
   INVALID_FORM,
   NON_COMPLIANT_PASSWORD_EXCEPTION,
+  NUDGE_PASSWORD_CHANGE,
+  REQUIRE_PASSWORD_CHANGE,
 } from './data/constants';
 import messages from './messages';
+import ChangePasswordPrompt from './ChangePasswordPrompt';
 
 const LoginFailureMessage = (props) => {
   const { intl } = props;
   const { context, errorCode, value } = props.loginError;
+  const authService = getAuthService();
   let errorList;
   let link;
   let resetLink = (
@@ -131,6 +136,19 @@ const LoginFailureMessage = (props) => {
         );
       }
       break;
+    case NUDGE_PASSWORD_CHANGE:
+      // Need to clear the CSRF token here to fetch a new one because token is already rotated after successful login.
+      if (authService) {
+        authService.getCsrfTokenService().clearCsrfTokenCache();
+      }
+      return (
+        <ChangePasswordPrompt
+          redirectUrl={props.loginError.redirectUrl}
+          variant="nudge"
+        />
+      );
+    case REQUIRE_PASSWORD_CHANGE:
+      return <ChangePasswordPrompt />;
     default:
       // TODO: use errorCode instead of processing error messages on frontend
       errorList = value.trim().split('\n');
@@ -165,6 +183,7 @@ const LoginFailureMessage = (props) => {
 
 LoginFailureMessage.defaultProps = {
   loginError: {
+    redirectUrl: null,
     errorCode: null,
     value: '',
   },
@@ -176,6 +195,7 @@ LoginFailureMessage.propTypes = {
     email: PropTypes.string,
     errorCode: PropTypes.string,
     value: PropTypes.string,
+    redirectUrl: PropTypes.string,
   }),
   intl: intlShape.isRequired,
 };

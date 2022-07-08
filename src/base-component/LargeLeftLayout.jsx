@@ -47,18 +47,25 @@ const LargeLeftLayout = (props) => {
             <span className="lead mr-3">
               <SideDiscountBanner />
             </span>
-            <span className="dashed-border d-inline-flex flex-wrap align-items-center">
-              <span id="edx-welcome" className="text-white edx-welcome font-weight-bold mr-1">EDXWELCOME</span>
-              <FontAwesomeIcon
-                className="text-light-700 copyIcon ml-1.5 hover-discount-icon"
-                icon={faCut}
-                data-clipboard-action="copy"
-                data-clipboard-target="#edx-welcome"
-                onClick={() => setToastShow(true)}
-              />
+          </h1>
+          {experimentName === 'variation1' && isRegistrationPage ? (
+            <span className="text-light-300 dicount-heading">
+              <span className="lead mr-3">
+                <SideDiscountBanner />
+              </span>
+              <span className="dashed-border d-inline-flex flex-wrap align-items-center">
+                <span id="edx-welcome" className="text-white edx-welcome font-weight-bold mr-1">EDXWELCOME</span>
+                <FontAwesomeIcon
+                  className="text-light-700 copyIcon ml-1.5 hover-discount-icon"
+                  icon={faCut}
+                  data-clipboard-action="copy"
+                  data-clipboard-target="#edx-welcome"
+                  onClick={() => setToastShow(true)}
+                />
+              </span>
             </span>
-          </span>
-        ) : null}
+          ) : null}
+        </div>
       </div>
     </div>
   );
