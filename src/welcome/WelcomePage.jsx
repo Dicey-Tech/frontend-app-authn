@@ -218,7 +218,7 @@ const WelcomePage = (props) => {
             <div className="d-flex mt-4">
               <StatefulButton
                 type="submit"
-                variant="brand"
+                variant="primary"
                 className="login-button-width"
                 state={submitState}
                 labels={{

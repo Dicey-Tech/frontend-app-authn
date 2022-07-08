@@ -117,7 +117,7 @@ const ForgotPasswordPage = (props) => {
                   />
                   <StatefulButton
                     type="submit"
-                    variant="brand"
+                    variant="primary"
                     className="login-button-width"
                     state={submitState}
                     labels={{

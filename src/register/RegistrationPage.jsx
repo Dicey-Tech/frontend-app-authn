@@ -604,7 +604,7 @@ class RegistrationPage extends React.Component {
           name="createaccount"
           id="createaccount"
           type="submit"
-          variant="brand"
+          variant="primary"
           className="stateful-button-width mt-4 mb-4"
           state={submitState}
           labels={{

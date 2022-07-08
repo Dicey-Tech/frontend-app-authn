@@ -195,7 +195,7 @@ const ResetPasswordPage = (props) => {
                 />
                 <StatefulButton
                   type="submit"
-                  variant="brand"
+                  variant="primary"
                   className="stateful-button-width"
                   state={props.status}
                   labels={{
