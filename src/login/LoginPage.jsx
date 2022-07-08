@@ -248,7 +248,7 @@ class LoginPage extends React.Component {
               name="sign-in"
               id="sign-in"
               type="submit"
-              variant="brand"
+              variant="primary"
               className="login-button-width"
               state={submitState}
               labels={{

@@ -220,7 +220,7 @@ const WelcomePage = (props) => {
                 name="submit-profile"
                 id="submit-profile"
                 type="submit"
-                variant="brand"
+                variant="primary"
                 className="login-button-width"
                 state={submitState}
                 labels={{

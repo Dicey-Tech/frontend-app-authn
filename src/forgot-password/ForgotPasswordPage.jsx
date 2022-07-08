@@ -119,7 +119,7 @@ const ForgotPasswordPage = (props) => {
                     id="submit-forget-password"
                     name="submit-forget-password"
                     type="submit"
-                    variant="brand"
+                    variant="primary"
                     className="login-button-width"
                     state={submitState}
                     labels={{
