@@ -42,12 +42,6 @@ const LargeLeftLayout = (props) => {
           {intl.formatMessage(messages['discover.future'])}
           <br />
         </h1>
-        {experimentName === 'variation1' && isRegistrationPage ? (
-          <span className="text-light-300 dicount-heading">
-            <span className="lead mr-3">
-              <SideDiscountBanner />
-            </span>
-          </h1>
           {experimentName === 'variation1' && isRegistrationPage ? (
             <span className="text-light-300 dicount-heading">
               <span className="lead mr-3">
@@ -65,7 +59,6 @@ const LargeLeftLayout = (props) => {
               </span>
             </span>
           ) : null}
-        </div>
       </div>
     </div>
   );
