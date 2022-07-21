@@ -76,7 +76,7 @@ const messages = defineMessages({
   },
   'registration.create.account.heading': {
     id: 'registration.create.account.heading',
-    defaultMessage: 'Create account using',
+    defaultMessage: 'Create an account using',
     description: 'A message appears that above the 3rd party Auth providers',
   },
   'register.signupwith.email.button': {
@@ -308,7 +308,7 @@ const messages = defineMessages({
   'registration.using.tpa.form.heading': {
     id: 'registration.using.tpa.form.heading',
     defaultMessage: 'Finish creating your account',
-    description: 'Heading that appears above form when user is trying to create account using social auth',
+    description: 'Heading that appears above form when user is trying to Create an account using social auth',
   },
   'did.you.mean.alert.text': {
     id: 'did.you.mean.alert.text',

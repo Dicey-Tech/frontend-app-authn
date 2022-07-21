@@ -22,7 +22,7 @@
   "enterprisetpa.sso.button.title": "Sign in using {providerName}",
   "enterprisetpa.login.button.text": "Show me other ways to sign in or register",
   "sso.sign.in.with": "Sign in with {providerName}",
-  "sso.create.account.using": "Create account using {providerName}",
+  "sso.create.account.using": "Create an account using {providerName}",
   "show.password": "Show password",
   "hide.password": "Hide password",
   "one.letter": "1 Letter",

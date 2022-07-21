@@ -68,7 +68,7 @@ const messages = defineMessages({
   },
   'sso.create.account.using': {
     id: 'sso.create.account.using',
-    defaultMessage: 'Create account using {providerName}',
+    defaultMessage: 'Create an account using {providerName}',
     description: 'Screen reader text that appears before social auth provider name',
   },
   // password field strings
