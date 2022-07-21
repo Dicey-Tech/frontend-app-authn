@@ -8,7 +8,7 @@ import PropTypes, { string } from 'prop-types';
 import { getConfig, snakeCaseObject } from '@edx/frontend-platform';
 import { sendPageEvent, sendTrackEvent } from '@edx/frontend-platform/analytics';
 import {
-  injectIntl, intlShape, getCountryList, getLocale,
+  injectIntl, intlShape, getCountryList, getLocale, FormattedMessage
 } from '@edx/frontend-platform/i18n';
 import {
   Alert, Form, Hyperlink, StatefulButton, Icon, Button,
@@ -648,9 +648,7 @@ class RegistrationPage extends React.Component {
           className="stateful-button-width mt-4 mb-4"
           state={submitState}
           labels={{
-            default: this.state.registerRenameExpVariation === 'variation2' ? (
-              intl.formatMessage(messages['register.for.free.button'])
-            ) : intl.formatMessage(messages['create.account.button']),
+            default: intl.formatMessage(messages['create.account.button']),
             pending: '',
           }}
           onClick={this.handleSubmit}
