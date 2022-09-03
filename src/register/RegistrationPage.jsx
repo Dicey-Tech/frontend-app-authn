@@ -335,7 +335,7 @@ class RegistrationPage extends React.Component {
     this.setState({ signUpWithEmailVisible: true });
   }
 
-  isFormValid(payload) {
+  isFormValid(payload, dynamicFieldError) {
     const { errors } = this.state;
     let isValid = true;
 
@@ -542,7 +542,7 @@ class RegistrationPage extends React.Component {
     );
   }
 
-  renderSignUpForm(intl, currentProvider, submitState) {
+  renderSignUpForm(intl, currentProvider, submitState, formFields) {
     return (
       <>
         <FormGroup
@@ -608,6 +608,7 @@ class RegistrationPage extends React.Component {
           errorCode={this.state.errorCode}
           readOnly={this.state.readOnly}
         />
+        {formFields}
         {(getConfig().MARKETING_EMAILS_OPT_IN)
           && (
             <Form.Checkbox
@@ -805,7 +806,7 @@ class RegistrationPage extends React.Component {
                   </Button>
                 </div>
               )
-              : this.renderSignUpForm(intl, currentProvider, submitState)}
+              : this.renderSignUpForm(intl, currentProvider, submitState, formFields)}
 
           </Form>
           {(this.state.optimizelyExperimentName === 'variation1' || this.state.optimizelyExperimentName === 'variation2')
