@@ -164,6 +164,7 @@ class RegistrationPage extends React.Component {
       this.setState({
         ...nextProps.thirdPartyAuthContext.pipelineUserDetails,
         country: nextProps.thirdPartyAuthContext.countryCode || '',
+        signUpWithEmailVisible: (nextProps.thirdPartyAuthContext.pipelineUserDetails.email) ? true: false,
       });
       return false;
     }
@@ -795,12 +796,10 @@ class RegistrationPage extends React.Component {
               currentProvider,
               thirdPartyAuthApiStatus,
               intl)}
-            <div className="d-flex mt-4 mb-3 h4 justify-content-center">
-              {intl.formatMessage(messages['register.signupwith.or.heading'])}
-            </div>
             {!this.state.signUpWithEmailVisible
               ? (
                 <div className="d-flex mt-4 mb-3 justify-content-center">
+                  {intl.formatMessage(messages['register.signupwith.or.heading'])}
                   <Button name="signupwemail" id="signupwemail" variant="primary" onClick={this.handleSignUpEmailClick}>
                     {intl.formatMessage(messages['register.signupwith.email.button'])}
                   </Button>
