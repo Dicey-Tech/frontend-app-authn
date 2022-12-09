@@ -29,8 +29,9 @@ function RedirectLogistration(props) {
       setCookie('van-504-returning-user', true);
       // use this component to redirect WelcomePage after successful registration
       // return <Redirect to={WELCOME_PAGE} />;
-      const registrationResult = { redirectUrl: finalRedirectUrl, success };
-      return <Redirect to={{ pathname: WELCOME_PAGE, state: { registrationResult } }} />;
+      // const registrationResult = { redirectUrl: finalRedirectUrl, success };
+      // return <Redirect to={{ pathname: WELCOME_PAGE, state: { registrationResult } }} />;
+      finalRedirectUrl = "https://portfolio.diceytech.co.uk/registration";
     }
 
     window.location.href = finalRedirectUrl;
